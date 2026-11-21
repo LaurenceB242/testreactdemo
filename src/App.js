@@ -217,9 +217,6 @@ class App extends Component{
          
       </Fragment>
     )
-    
-    // Exemple alternatif (en commentaire) : comment React écrit le HTML sous le capot sans JSX
-    // return React.createElement('h1',null,'Hello World');
     }
   }
 
