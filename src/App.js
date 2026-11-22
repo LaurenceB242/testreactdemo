@@ -37,12 +37,12 @@ class App extends Component {
   }
 
   // Change le nom d'UN chanteur à chaque frappe
-  handleChange = (event, id) => {
-    const nom = event.target.value   // on lit la valeur avant le setState
+  handleChange = (event, id, champ) => {
+    const valeur = event.target.value   // on lit la valeur avant le setState
     this.setState(prev => ({
       artiste: {
         ...prev.artiste,
-        [id]: { ...prev.artiste[id], nom }
+        [id]: { ...prev.artiste[id], [champ]: valeur }   // [champ] = clé calculée
       }
     }))
   }
@@ -66,20 +66,29 @@ class App extends Component {
       }
     }))
   }
-
+  vieillirTous = (nb) => {
+    this.setState(prev => {
+      const artiste = {}
+      Object.keys(prev.artiste).forEach(id => {
+        artiste[id] = { ...prev.artiste[id], age: prev.artiste[id].age + nb }
+      })
+      return { artiste }
+    })
+  }
   render() {
     const list = Object.keys(this.state.artiste).map(id => (
-      <Artiste
-        key={id}
-        age={this.state.artiste[id].age}
-        prenom={this.state.artiste[id].prenom}
-        nom={this.state.artiste[id].nom}
-        handleChange={(event) => this.handleChange(event, id)}
-        hideName={() => this.hideName(id)}
-        plus={this.state.plus}
-        handleClick={() => this.handleClick(id, this.state.plus)}
-      />
-    ))
+    <Artiste
+      key={id}
+      age={this.state.artiste[id].age}
+      prenom={this.state.artiste[id].prenom}
+      nom={this.state.artiste[id].nom}
+      handleChange={(event) => this.handleChange(event, id, "nom")}
+      handleChangePrenom={(event) => this.handleChange(event, id, "prenom")}
+      hideName={() => this.hideName(id)}
+      plus={this.state.plus}
+      handleClick={() => this.handleClick(id, this.state.plus)}
+    />
+  ))
 
     return (
       <Fragment>
@@ -93,6 +102,9 @@ class App extends Component {
           <button onClick={this.handleShow}>
             {this.state.isShow ? 'Cacher' : 'Montrer'}
           </button>
+
+          <h4>Toute la promo</h4>
+<Button plus={this.state.plus} veillir={() => this.vieillirTous(this.state.plus)} />
         </Artiste>
       </Fragment>
     )

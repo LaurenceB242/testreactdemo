@@ -1,14 +1,20 @@
-import Button from "./Button";   // ✅ le bon fichier
+import Button from "./Button";
 
-const Artiste = ({ prenom, nom, age, children, handleChange, hideName, plus, handleClick }) => {
+const Artiste = ({ prenom, nom, age, children, handleChange, handleChangePrenom, hideName, plus, handleClick }) => {
     return (
         <>
             <h2 style={{ backgroundColor: age < 46 ? 'dodgerblue' : 'crimson', color: 'white' }}>
                 Chanteur : {prenom} {nom.toUpperCase()} - {age} ans
             </h2>
 
-            {/* On n'affiche ces éléments que si le parent a envoyé la fonction */}
-            {handleChange && <input type="text" value={nom} onChange={handleChange} />}
+            {/* Chaque input est contrôlé : value vient du state, onChange le met à jour */}
+            {handleChangePrenom && (
+                <input type="text" placeholder="Prénom" value={prenom} onChange={handleChangePrenom} />
+            )}
+            {handleChange && (
+                <input type="text" placeholder="Nom" value={nom} onChange={handleChange} />
+            )}
+
             {hideName && <button onClick={hideName}>X</button>}
 
             {children ? <div>{children}</div> : null}
