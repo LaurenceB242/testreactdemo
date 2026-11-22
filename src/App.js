@@ -100,9 +100,29 @@ const artistes = {
 // Déclaration de la classe du composant nommé "App" qui hérite de Component
 class App extends Component{
 
-  state = {
-    artiste: artistes,
-    plus: 2
+// Le "state" (l'état) est la mémoire centrale de ton composant.
+// C'est ici que tu stockes toutes les données qui peuvent évoluer ou s'afficher.
+state = {
+  // Stocke toute la liste de tes chanteurs pour pouvoir les utiliser et les afficher
+  artiste: artistes,
+  
+  // Un nombre de référence (par exemple, pour faire vieillir les artistes de 2 ans)
+  plus: 2,
+  
+  // Un interrupteur (vrai/faux). Il sert souvent à savoir si un élément doit être visible ou caché
+  isShow: false
+}
+
+componentDidMount(){
+    // Au moment où le composant s'affiche pour la première fois, 
+    // on injecte la liste de tes chanteurs dans le state
+    this.setState({ artiste: artistes })
+  }
+
+  handleShow = () => {
+    // Inverse la valeur de isShow (si c'était true, ça devient false, et inversement)
+    const isShow = !this.state.isShow
+    this.setState({ isShow:isShow })
   }
 
  handleClick = (nb) => {
@@ -118,98 +138,43 @@ class App extends Component{
 
   // Méthode obligatoire dans un composant classe pour afficher le contenu
   render() {
+      const list = Object.keys(this.state.artiste).map(iteration => {
+      return (
+        <Membre
+          key={iteration} 
+          age={this.state.artiste[iteration].age}
+          prenom={this.state.artiste[iteration].prenom}
+          nom={this.state.artiste[iteration].nom}
+        />
+      )
+    })
+
     return (
       // Le Fragment évite d'ajouter une balise <div> inutile autour de nos titres
       <Fragment>
         <h1>Les chanteurs de la promo 2026 StarAcademy</h1>
         <h3>Qui resteras à la fin ?</h3>
+        {list}
 
         {/* Dans une classe React, dès que tu veux attraper quelque chose qui appartient à ton composant (comme son state -> état), tu es obligé de coller le mot this. devant. */}
-      <Membre 
+      {/* <Membre 
         nom={this.state.artiste.chanteur1.nom} 
         prenom={this.state.artiste.chanteur1.prenom} 
         age={this.state.artiste.chanteur1.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur2.nom} 
-        prenom={this.state.artiste.chanteur2.prenom} 
-        age={this.state.artiste.chanteur2.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur3.nom} 
-        prenom={this.state.artiste.chanteur3.prenom} 
-        age={this.state.artiste.chanteur3.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur4.nom} 
-        prenom={this.state.artiste.chanteur4.prenom} 
-        age={this.state.artiste.chanteur4.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur5.nom} 
-        prenom={this.state.artiste.chanteur5.prenom} 
-        age={this.state.artiste.chanteur5.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur6.nom} 
-        prenom={this.state.artiste.chanteur6.prenom} 
-        age={this.state.artiste.chanteur6.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur7.nom} 
-        prenom={this.state.artiste.chanteur7.prenom} 
-        age={this.state.artiste.chanteur7.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur8.nom} 
-        prenom={this.state.artiste.chanteur8.prenom} 
-        age={this.state.artiste.chanteur8.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur9.nom} 
-        prenom={this.state.artiste.chanteur9.prenom} 
-        age={this.state.artiste.chanteur9.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur10.nom} 
-        prenom={this.state.artiste.chanteur10.prenom} 
-        age={this.state.artiste.chanteur10.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur11.nom} 
-        prenom={this.state.artiste.chanteur11.prenom} 
-        age={this.state.artiste.chanteur11.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur12.nom} 
-        prenom={this.state.artiste.chanteur12.prenom} 
-        age={this.state.artiste.chanteur12.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur13.nom} 
-        prenom={this.state.artiste.chanteur13.prenom} 
-        age={this.state.artiste.chanteur13.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur14.nom} 
-        prenom={this.state.artiste.chanteur14.prenom} 
-        age={this.state.artiste.chanteur14.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur15.nom} 
-        prenom={this.state.artiste.chanteur15.prenom} 
-        age={this.state.artiste.chanteur15.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur16.nom} 
-        prenom={this.state.artiste.chanteur16.prenom} 
-        age={this.state.artiste.chanteur16.age} 
-      />
-      <Membre 
-        nom={this.state.artiste.chanteur17.nom} 
-        prenom={this.state.artiste.chanteur17.prenom} 
-        age={this.state.artiste.chanteur17.age} 
-      />
+        
+      /> */}
+       <Membre
+          age="50"
+          nom="McGregor"
+        >
+          {
+            this.state.isShow ? <strong>Je suis le GOAT</strong> : null
+          }
+
+          <button onClick={this.handleShow}>
+            {this.state.isShow ? 'Cacher' : 'Montrer'}
+          </button>
+       </Membre>
      
         {/* this.handleClick(this.state.plus) dans une fonction anonyme () => {} fonction flechée */}
         <Button plus={this.state.plus} veillir={()=>{this.handleClick(this.state.plus)}}/>
